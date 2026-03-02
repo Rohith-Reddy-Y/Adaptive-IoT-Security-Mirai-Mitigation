@@ -1,6 +1,7 @@
 streamlit
 numpy
 pandas
-xgboost
 pyarrow
+xgboost
+scipy
 matplotlib
