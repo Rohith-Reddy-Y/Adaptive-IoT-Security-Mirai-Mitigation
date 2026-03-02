@@ -1,0 +1,13 @@
+duration
+local_orig
+local_resp
+missed_bytes
+orig_bytes
+orig_ip_bytes
+orig_pkts
+proto_tcp
+proto_udp
+resp_bytes
+resp_ip_bytes
+resp_pkts
+service_-

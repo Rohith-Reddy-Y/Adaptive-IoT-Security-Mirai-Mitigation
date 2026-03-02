@@ -1,0 +1,74 @@
+{
+  "meta": {
+    "dataset": "dataset20",
+    "feature_count": 15,
+    "train_rows": 2300,
+    "val_rows": 493,
+    "test_rows": 493,
+    "created_at": "2026-01-19T17:43:46.631252+00:00",
+    "class_counts_train": {
+      "0": 2287,
+      "1": 13
+    },
+    "class_counts_val": {
+      "0": 493,
+      "1": 0
+    },
+    "class_counts_test": {
+      "0": 492,
+      "1": 1
+    },
+    "scale_pos_weight": 175.92307692307693,
+    "chosen_threshold": 0.5
+  },
+  "metrics": {
+    "validation": {
+      "n": 493,
+      "class_counts": {
+        "0": 493
+      },
+      "note": "single_class",
+      "accuracy_default_thresh": 1.0
+    },
+    "test": {
+      "n": 493,
+      "class_counts": {
+        "0": 492,
+        "1": 1
+      },
+      "roc_auc": 1.0,
+      "pr_auc": 1.0,
+      "confusion_0.5": {
+        "tn": 492,
+        "fp": 0,
+        "fn": 0,
+        "tp": 1
+      },
+      "accuracy_0.5": 1.0,
+      "recall_at_fpr_0.01": 1.0,
+      "recall_at_fpr_0.005": 1.0,
+      "recall_at_fpr_0.001": 1.0,
+      "probs_sample_mean": 0.005601918790489435
+    },
+    "train": {
+      "n": 2300,
+      "class_counts": {
+        "0": 2287,
+        "1": 13
+      },
+      "roc_auc": 0.9999663650734925,
+      "pr_auc": 0.989010989010989,
+      "confusion_0.5": {
+        "tn": 2286,
+        "fp": 1,
+        "fn": 0,
+        "tp": 13
+      },
+      "accuracy_0.5": 0.9995652173913043,
+      "recall_at_fpr_0.01": 1.0,
+      "recall_at_fpr_0.005": 1.0,
+      "recall_at_fpr_0.001": 1.0,
+      "probs_sample_mean": 0.009507706388831139
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "dataset": "dataset1",
+  "feature_count": 16,
+  "train_rows": 316,
+  "val_rows": 68,
+  "test_rows": 68,
+  "created_at": "2026-01-19T03:33:08.757163+00:00",
+  "status": "single_class_train",
+  "class_counts_train": {
+    "0": 316
+  }
+}

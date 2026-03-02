@@ -1,0 +1,62 @@
+{
+  "meta": {
+    "dataset": "dataset13",
+    "feature_count": 17,
+    "train_rows": 3098,
+    "val_rows": 665,
+    "test_rows": 663,
+    "created_at": "2026-01-19T05:12:17.018828+00:00",
+    "class_counts_train": {
+      "0": 3092,
+      "1": 6
+    },
+    "class_counts_val": {
+      "0": 665,
+      "1": 0
+    },
+    "class_counts_test": {
+      "0": 663,
+      "1": 0
+    },
+    "scale_pos_weight": 515.3333333333334,
+    "chosen_threshold": 0.5
+  },
+  "metrics": {
+    "validation": {
+      "n": 665,
+      "class_counts": {
+        "0": 665
+      },
+      "note": "single_class",
+      "accuracy_default_thresh": 1.0
+    },
+    "test": {
+      "n": 663,
+      "class_counts": {
+        "0": 663
+      },
+      "note": "single_class",
+      "accuracy_default_thresh": 1.0
+    },
+    "train": {
+      "n": 3098,
+      "class_counts": {
+        "0": 3092,
+        "1": 6
+      },
+      "roc_auc": 1.0,
+      "pr_auc": 1.0,
+      "confusion_0.5": {
+        "tn": 3092,
+        "fp": 0,
+        "fn": 0,
+        "tp": 6
+      },
+      "accuracy_0.5": 1.0,
+      "recall_at_fpr_0.01": 1.0,
+      "recall_at_fpr_0.005": 1.0,
+      "recall_at_fpr_0.001": 1.0,
+      "probs_sample_mean": 0.0052413842640817165
+    }
+  }
+}

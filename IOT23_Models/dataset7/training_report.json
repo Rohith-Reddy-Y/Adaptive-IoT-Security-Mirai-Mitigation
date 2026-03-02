@@ -1,0 +1,88 @@
+{
+  "meta": {
+    "dataset": "dataset7",
+    "feature_count": 15,
+    "train_rows": 2506741,
+    "val_rows": 537186,
+    "test_rows": 537101,
+    "created_at": "2026-01-19T02:52:12.128155+00:00",
+    "class_counts_train": {
+      "0": 1835,
+      "1": 2504906
+    },
+    "class_counts_val": {
+      "0": 312,
+      "1": 536874
+    },
+    "class_counts_test": {
+      "0": 329,
+      "1": 536772
+    },
+    "scale_pos_weight": 0.0007325624195079575,
+    "chosen_threshold": 0.569550096988678
+  },
+  "metrics": {
+    "validation": {
+      "n": 537186,
+      "class_counts": {
+        "0": 312,
+        "1": 536874
+      },
+      "roc_auc": 0.5,
+      "pr_auc": 0.9994191955858864,
+      "best_threshold_by_f1": 0.569550096988678,
+      "best_f1": 0.9997095134345035,
+      "confusion_0.5": {
+        "tn": 0,
+        "fp": 312,
+        "fn": 0,
+        "tp": 536874
+      },
+      "accuracy_0.5": 0.9994191955858864,
+      "recall_at_fpr_0.01": 0.0,
+      "recall_at_fpr_0.005": 0.0,
+      "recall_at_fpr_0.001": 0.0,
+      "probs_sample_mean": 0.5695499181747437
+    },
+    "test": {
+      "n": 537101,
+      "class_counts": {
+        "0": 329,
+        "1": 536772
+      },
+      "roc_auc": 0.5744624961412358,
+      "pr_auc": 0.9994786283719793,
+      "confusion_0.5": {
+        "tn": 49,
+        "fp": 280,
+        "fn": 6,
+        "tp": 536766
+      },
+      "accuracy_0.5": 0.9994675116970552,
+      "recall_at_fpr_0.01": 0.0,
+      "recall_at_fpr_0.005": 0.0,
+      "recall_at_fpr_0.001": 0.0,
+      "probs_sample_mean": 0.5694921016693115
+    },
+    "train": {
+      "n": 2506741,
+      "class_counts": {
+        "0": 1835,
+        "1": 2504906
+      },
+      "roc_auc": 0.6236874487206578,
+      "pr_auc": 0.9994489589538018,
+      "confusion_0.5": {
+        "tn": 454,
+        "fp": 1381,
+        "fn": 74,
+        "tp": 2504832
+      },
+      "accuracy_0.5": 0.9994195650847056,
+      "recall_at_fpr_0.01": 0.0,
+      "recall_at_fpr_0.005": 0.0,
+      "recall_at_fpr_0.001": 0.0,
+      "probs_sample_mean": 0.5694313645362854
+    }
+  }
+}

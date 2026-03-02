@@ -1,0 +1,88 @@
+{
+  "meta": {
+    "dataset": "dataset15",
+    "feature_count": 16,
+    "train_rows": 9551569,
+    "val_rows": 2046767,
+    "test_rows": 2046762,
+    "created_at": "2026-01-19T08:58:25.312619+00:00",
+    "class_counts_train": {
+      "0": 1604,
+      "1": 9549965
+    },
+    "class_counts_val": {
+      "0": 425,
+      "1": 2046342
+    },
+    "class_counts_test": {
+      "0": 634,
+      "1": 2046128
+    },
+    "scale_pos_weight": 0.00016795873073880376,
+    "chosen_threshold": 0.4518013298511505
+  },
+  "metrics": {
+    "validation": {
+      "n": 2046767,
+      "class_counts": {
+        "0": 425,
+        "1": 2046342
+      },
+      "roc_auc": 1.0,
+      "pr_auc": 1.0,
+      "best_threshold_by_f1": 0.4518013298511505,
+      "best_f1": 0.9999999999995,
+      "confusion_0.5": {
+        "tn": 425,
+        "fp": 0,
+        "fn": 2361,
+        "tp": 2043981
+      },
+      "accuracy_0.5": 0.9988464734872118,
+      "recall_at_fpr_0.01": 1.0,
+      "recall_at_fpr_0.005": 1.0,
+      "recall_at_fpr_0.001": 1.0,
+      "probs_sample_mean": 0.9953730702400208
+    },
+    "test": {
+      "n": 2046762,
+      "class_counts": {
+        "0": 634,
+        "1": 2046128
+      },
+      "roc_auc": 1.0,
+      "pr_auc": 1.0,
+      "confusion_0.5": {
+        "tn": 634,
+        "fp": 0,
+        "fn": 2364,
+        "tp": 2043764
+      },
+      "accuracy_0.5": 0.9988450049395093,
+      "recall_at_fpr_0.01": 1.0,
+      "recall_at_fpr_0.005": 1.0,
+      "recall_at_fpr_0.001": 1.0,
+      "probs_sample_mean": 0.9952704310417175
+    },
+    "train": {
+      "n": 9551569,
+      "class_counts": {
+        "0": 1604,
+        "1": 9549965
+      },
+      "roc_auc": 0.9999999998041539,
+      "pr_auc": 0.9999999999999342,
+      "confusion_0.5": {
+        "tn": 1604,
+        "fp": 0,
+        "fn": 11030,
+        "tp": 9538935
+      },
+      "accuracy_0.5": 0.9988452159011781,
+      "recall_at_fpr_0.01": 1.0,
+      "recall_at_fpr_0.005": 1.0,
+      "recall_at_fpr_0.001": 0.999999685862723,
+      "probs_sample_mean": 0.9954119324684143
+    }
+  }
+}
