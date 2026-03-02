@@ -1,0 +1,20 @@
+# Large folders
+IOT23_Models/
+parquet_files/
+browser_input_datasets/
+shuffled_csv's/
+
+# Large data/model file types
+*.svm
+*.parquet
+*.csv
+*.xgb
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Environments/secrets
+.venv/
+venv/
+.env
