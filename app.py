@@ -8,19 +8,35 @@ import xgboost as xgb
 # =========================
 # CONFIG
 # =========================
-# IMPORTANT:
-# If you run streamlit from the "MIRAI Project" folder, this relative path is OK.
-# Otherwise change to an absolute path like:
-# MODELS_ROOT = r"C:\Users\Rohit\OneDrive\Desktop\MIRAI Project\IOT23_Models"
-MODELS_ROOT = "IOT23_Models"
-
-THRESHOLD = 0.5       # global decision threshold
+MODELS_ROOT = "IOT23_Models"   # keep same name in GitHub repo
+THRESHOLD = 0.5
 COMBINE_RULE = "mean"  # "max" or "mean"
 
 
 # =========================
 # Helpers
 # =========================
+def resolve_models_root(models_root: str) -> str:
+    """
+    Make MODELS_ROOT work both:
+      - locally (running from project folder)
+      - on Streamlit Cloud (/mount/src/<repo>/)
+    """
+    # 1) If it's already a valid absolute/relative path from current working dir
+    p1 = os.path.abspath(models_root)
+    if os.path.exists(p1):
+        return p1
+
+    # 2) Try relative to this file's directory (more reliable on Streamlit Cloud)
+    here = os.path.dirname(os.path.abspath(__file__))
+    p2 = os.path.join(here, models_root)
+    if os.path.exists(p2):
+        return os.path.abspath(p2)
+
+    # 3) As a last fallback, return the "best guess" (for debug printing)
+    return p1
+
+
 def load_models(models_root: str):
     """
     Loads all models that have BOTH:
@@ -32,7 +48,7 @@ def load_models(models_root: str):
     items = []
     debug_lines = []
 
-    abs_root = os.path.abspath(models_root)
+    abs_root = resolve_models_root(models_root)
     debug_lines.append(f"MODELS_ROOT (resolved): {abs_root}")
 
     if not os.path.exists(abs_root):
@@ -54,7 +70,7 @@ def load_models(models_root: str):
             continue
 
         # load feature list
-        with open(feat_path, "r") as f:
+        with open(feat_path, "r", encoding="utf-8") as f:
             feats = [ln.strip() for ln in f if ln.strip()]
 
         # load model
@@ -68,12 +84,6 @@ def load_models(models_root: str):
 
 
 def one_hot_proto_service(df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Converts raw columns:
-      proto -> proto_tcp, proto_udp, proto_icmp
-      service -> service_dns, service_http, service_-
-    If proto/service columns are missing, it just returns df unchanged.
-    """
     out = df.copy()
 
     if "proto" in out.columns:
@@ -92,16 +102,8 @@ def one_hot_proto_service(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def prepare_features(df_raw: pd.DataFrame, feature_list: list[str]) -> pd.DataFrame:
-    """
-    - Drops label columns if present (y_binary, y_multiclass)
-    - Adds one-hot proto/service columns if raw proto/service exist
-    - Ensures all required feature columns exist (missing -> 0)
-    - Coerces numeric; NaN -> 0
-    - Returns X in the exact feature_list order
-    """
     df = df_raw.copy()
     df = df.drop(columns=["y_binary", "y_multiclass"], errors="ignore")
-
     df = one_hot_proto_service(df)
 
     for c in feature_list:
@@ -113,14 +115,11 @@ def prepare_features(df_raw: pd.DataFrame, feature_list: list[str]) -> pd.DataFr
 
 
 def predict_ensemble(df_raw: pd.DataFrame, models: list[dict]) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-    """
-    Returns:
-      final_prob (N,)
-      final_pred (N,)
-      per_model_probs (N, M)
-    """
     if len(models) == 0:
-        raise RuntimeError("No models found in MODELS_ROOT. Fix MODELS_ROOT path or ensure model.xgb + feature_list.txt exist.")
+        raise RuntimeError(
+            "No models found in MODELS_ROOT. Ensure IOT23_Models is in the GitHub repo and contains "
+            "dataset*/model.xgb + dataset*/feature_list.txt."
+        )
 
     per_probs = []
     for m in models:
@@ -133,7 +132,7 @@ def predict_ensemble(df_raw: pd.DataFrame, models: list[dict]) -> tuple[np.ndarr
 
     if COMBINE_RULE == "mean":
         final_prob = per_model_probs.mean(axis=1)
-    else:  # "max"
+    else:
         final_prob = per_model_probs.max(axis=1)
 
     final_pred = (final_prob >= THRESHOLD).astype(int)
@@ -147,10 +146,26 @@ st.set_page_config(page_title="IoT Attack Detector", layout="wide")
 st.title("IoT Attack Detector (Ensemble of all trained models)")
 st.caption("Upload RAW CSV/Parquet → predicts BENIGN/MALICIOUS using all dataset models (max/mean rule).")
 
+# ---- EXTRA (debug only): show what Streamlit Cloud actually has
+st.sidebar.subheader("Server file check")
+st.sidebar.write("cwd:", os.getcwd())
+try:
+    st.sidebar.write("repo root:", os.listdir("."))
+except Exception as e:
+    st.sidebar.write("Could not list root:", str(e))
+st.sidebar.write("IOT23_Models exists?", os.path.exists("IOT23_Models"))
+if os.path.exists("IOT23_Models"):
+    try:
+        st.sidebar.write("IOT23_Models contents:", os.listdir("IOT23_Models")[:30])
+    except Exception as e:
+        st.sidebar.write("Could not list IOT23_Models:", str(e))
+
+
 @st.cache_resource
 def cached_models():
     models, debug = load_models(MODELS_ROOT)
     return models, debug
+
 
 models, debug_lines = cached_models()
 
@@ -164,13 +179,12 @@ with st.sidebar.expander("Debug (model loading logs)"):
     st.code("\n".join(debug_lines) if debug_lines else "No debug logs")
 
 if len(models) == 0:
-    st.error("No models loaded. Check the sidebar Debug logs. Most common fix: set MODELS_ROOT to the correct absolute path.")
+    st.error("No models loaded. Check the sidebar Debug logs.")
     st.stop()
 
 uploaded = st.file_uploader("Upload RAW data (CSV or Parquet)", type=["csv", "parquet"])
 
 if uploaded is not None:
-    # Read file
     if uploaded.name.lower().endswith(".csv"):
         df_raw = pd.read_csv(uploaded)
     else:
@@ -178,7 +192,6 @@ if uploaded is not None:
 
     st.subheader("Preview (raw input)")
     st.dataframe(df_raw.head(30), use_container_width=True)
-
     st.write(f"Rows uploaded: **{len(df_raw)}**")
 
     if st.button("Run Detection"):
@@ -191,29 +204,26 @@ if uploaded is not None:
         st.subheader("Results (top rows)")
         st.dataframe(out[["final_label", "final_prob"]].head(50), use_container_width=True)
 
-        # Download
         csv_bytes = out.to_csv(index=False).encode("utf-8")
         st.download_button(
             "Download predictions.csv",
             data=csv_bytes,
             file_name="predictions.csv",
-            mime="text/csv"
+            mime="text/csv",
         )
 
-        # Show which model fired strongest per row
         model_names = [m["name"] for m in models]
         best_idx = per_model_probs.argmax(axis=1)
-        out2 = pd.DataFrame({
-            "best_model": [model_names[i] for i in best_idx],
-            "best_model_prob": per_model_probs.max(axis=1)
-        })
+        out2 = pd.DataFrame(
+            {
+                "best_model": [model_names[i] for i in best_idx],
+                "best_model_prob": per_model_probs.max(axis=1),
+            }
+        )
 
         st.subheader("Most confident dataset-model (per row)")
         st.dataframe(out2.head(50), use_container_width=True)
 
-        # =========================================================
-        # ✅ VISUAL ANALYTICS (ADDED ONLY — no logic changes)
-        # =========================================================
         st.markdown("---")
         st.header("📊 Visual Analytics")
 
